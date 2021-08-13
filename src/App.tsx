@@ -24,12 +24,12 @@ const App = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [segment]);
 
   return (
     <div className="App">
       <ul>
-        {products.map((product) => (
+        {products.length && products.map((product) => (
           <li>
             {product.productId} - {product.productTitle}
           </li>
