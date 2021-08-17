@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import NumberFormat from "react-number-format";
+import "./App.scss";
 
 const API_URL = "https://external-middleware.herokuapp.com";
+const DOMAIN = "https://www.exito.com";
 
 const App = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -28,12 +30,48 @@ const App = () => {
 
   return (
     <div className="App">
-      <ul>
-        {products.length && products.map((product) => (
-          <li>
-            {product.productId} - {product.productTitle}
-          </li>
-        ))}
+      <ul className="mystyle-products">
+        {products.map((product) => {
+          return product.items.map((item: any) => (
+            <li className="product" key={item.itemId}>
+              <a href={getUrl(product.link)}>
+                <span className="onsale">Sale!</span>
+                <img
+                  className="attachment-shop_catalog"
+                  src={item.images[0].imageUrl}
+                  alt={product.productName}
+                />
+                <h3>{item.name}</h3>
+                {item.sellers.map((seller: any) => (
+                  <div key={seller.sellerId}>
+                    <span className="price">
+                      <del>
+                        <span className="amount">
+                          <NumberFormat
+                            value={seller.commertialOffer.Price}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"$"}
+                          />
+                        </span>
+                      </del>
+                      <ins>
+                        <span className="amount">
+                          <NumberFormat
+                            value={seller.commertialOffer.PriceWithoutDiscount}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"$"}
+                          />
+                        </span>
+                      </ins>
+                    </span>
+                  </div>
+                ))}
+              </a>
+            </li>
+          ));
+        })}
       </ul>
     </div>
   );
@@ -48,6 +86,11 @@ const getProducts = async (segment: string): Promise<any[]> => {
   } catch (error) {
     throw new Error(error);
   }
+};
+
+const getUrl = (url: string): string => {
+  const newUrl = new URL(url);
+  return `${DOMAIN}${newUrl.pathname}`;
 };
 
 export default App;
