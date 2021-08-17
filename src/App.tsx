@@ -10,10 +10,11 @@ const App = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const segment = urlParams.get("segment") as string;
+  const brand = urlParams.get("brand") as string;
 
   useEffect(() => {
     let mounted = true;
-    getProducts(segment)
+    getProducts(brand, segment)
       .then((productsResult) => {
         if (mounted) {
           setProducts(productsResult);
@@ -26,7 +27,7 @@ const App = () => {
     return () => {
       mounted = false;
     };
-  }, [segment]);
+  }, [brand, segment]);
 
   return (
     <div className="App">
@@ -77,8 +78,8 @@ const App = () => {
   );
 };
 
-const getProducts = async (segment: string): Promise<any[]> => {
-  const url = `${API_URL}?brand=samsung&segment=${segment}`;
+const getProducts = async (brand: string, segment: string): Promise<any[]> => {
+  const url = `${API_URL}?brand=${brand}&segment=${segment}&from=1&to=20`;
   const requestInit: RequestInit = { method: "GET", redirect: "follow" };
   try {
     const products = await fetch(url, requestInit).then((res) => res.json());
