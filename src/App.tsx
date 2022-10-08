@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import "./App.scss";
 
 const API_URL = "https://external-middleware.herokuapp.com";
@@ -48,7 +48,7 @@ const App = () => {
                     <span className="price">
                       <del>
                         <span className="amount">
-                          <NumberFormat
+                          <NumericFormat
                             value={seller.commertialOffer.Price}
                             displayType={"text"}
                             thousandSeparator={true}
@@ -58,7 +58,7 @@ const App = () => {
                       </del>
                       <ins>
                         <span className="amount">
-                          <NumberFormat
+                          <NumericFormat
                             value={seller.commertialOffer.PriceWithoutDiscount}
                             displayType={"text"}
                             thousandSeparator={true}
@@ -85,7 +85,7 @@ const getProducts = async (brand: string, segment: string): Promise<any[]> => {
     const products = await fetch(url, requestInit).then((res) => res.json());
     return products;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(`Error: ${error}`);
   }
 };
 
